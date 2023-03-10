@@ -3,6 +3,7 @@ import {
   onSetActiveEvent,
   onAddNewEvent,
   onUpdateEvent,
+  onDeleteEvent,
 } from "../store/calendar/calendarSlice";
 
 export const useCalendarStore = () => {
@@ -32,12 +33,21 @@ export const useCalendarStore = () => {
     }
   };
 
+  const startDeletingEvent = () => {
+    // TODO: llegar al backend
+
+    // Todo bien
+    dispatch(onDeleteEvent());
+  };
+
   return {
     // Propiedades
     events,
     activeEvent,
+    hasEventSelected: !!activeEvent,
     // Métodos
     setActiveEvent,
     startSavingEvent,
+    startDeletingEvent,
   };
 };
