@@ -7,22 +7,10 @@ import { localizer } from "../../helpers";
 import { CalendarEvent, CalendarModal, Navbar } from "../";
 import { getMessagesEs } from "../../helpers";
 import { useUiStore } from "../../hooks/useUiStore";
-
-const events = [
-  {
-    title: "All Day Event very long title",
-    notes: "Some notes about this event",
-    start: new Date(),
-    end: addHours(new Date(), 2),
-    bgcolor: "#fafafa",
-    user: {
-      _id: "123",
-      name: "Ulises",
-    },
-  },
-];
+import { useCalendarStore } from "../../hooks/useCalendarStore";
 
 export const CalendarPage = () => {
+  const { events } = useCalendarStore();
   const { openDateModal } = useUiStore();
   const [lastView, setLastView] = useState(
     localStorage.getItem("lastView") || "week"
