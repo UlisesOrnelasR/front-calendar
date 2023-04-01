@@ -1,8 +1,11 @@
 import React from "react";
 import { useForm } from "react-hook-form";
+import { useAuthStore } from "../../hooks/useAuthStore";
 import "./LoginPage.css";
 
 export const LoginPage = () => {
+  const { startLogin } = useAuthStore();
+
   const {
     register,
     handleSubmit,
@@ -18,8 +21,7 @@ export const LoginPage = () => {
   } = useForm();
 
   const loginSubmit = ({ loginEmail, loginPassword }) => {
-    console.log(loginEmail);
-    console.log(loginPassword);
+    startLogin({ email: loginEmail, password: loginPassword });
   };
 
   const registerSubmit = ({
