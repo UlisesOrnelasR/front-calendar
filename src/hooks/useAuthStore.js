@@ -13,10 +13,8 @@ export const useAuthStore = () => {
   const { status, user, errorMessage } = useSelector((state) => state.auth);
 
   const startLogin = async ({ email, password }) => {
-    console.log(email, password);
-
+    dispatch(onCheckLogin());
     try {
-      dispatch(onCheckLogin());
       const { data } = await calendarApi.post("/auth", {
         email,
         password,
@@ -41,6 +39,30 @@ export const useAuthStore = () => {
     }
   };
 
+  const startRegister = async ({ name, email, password }) => {
+    dispatch(onCheckLogin());
+    try {
+      const { data } = await calendarApi.post("/auth/register", {
+        name,
+        email,
+        password,
+      });
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("token-init-date", new Date().getTime()); //Sirve para hacer calculos con la duracion del token
+      dispatch(
+        onLogin({
+          name: data.name,
+          uid: data.uid,
+        })
+      );
+    } catch (error) {
+      dispatch(onLogout(error.response.data?.msg || "Failed to register"));
+      setTimeout(() => {
+        dispatch(clearErrorNessage());
+      }, 500);
+    }
+  };
+
   return {
     // Propiedades
     status,
@@ -48,5 +70,6 @@ export const useAuthStore = () => {
     errorMessage,
     // Métodos
     startLogin,
+    startRegister,
   };
 };

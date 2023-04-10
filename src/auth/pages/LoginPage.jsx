@@ -6,7 +6,7 @@ import "./LoginPage.css";
 import Swal from "sweetalert2";
 
 export const LoginPage = () => {
-  const { startLogin, errorMessage } = useAuthStore();
+  const { startLogin, errorMessage, startRegister } = useAuthStore();
 
   const {
     register,
@@ -33,10 +33,14 @@ export const LoginPage = () => {
     registerPassword2,
   }) => {
     if (registerPassword !== registerPassword2) {
-      alert("Las contraseñas no coinciden");
+      Swal.fire("Error", "Passwords do not match", "error");
       return;
     }
-    console.log("se registro");
+    startRegister({
+      name: registerName,
+      email: registerEmail,
+      password: registerPassword,
+    });
   };
 
   useEffect(() => {
