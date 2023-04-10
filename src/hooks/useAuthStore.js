@@ -1,6 +1,11 @@
 import { useDispatch, useSelector } from "react-redux";
-import { onCheckLogin, onLogin } from "../store/auth/authSlice";
 import { calendarApi } from "../api";
+import {
+  onCheckLogin,
+  onLogin,
+  onLogout,
+  clearErrorNessage,
+} from "../store/auth/authSlice";
 
 export const useAuthStore = () => {
   const dispatch = useDispatch();
@@ -11,13 +16,28 @@ export const useAuthStore = () => {
     console.log(email, password);
 
     try {
-      const response = await calendarApi.post("/auth", {
+      dispatch(onCheckLogin());
+      const { data } = await calendarApi.post("/auth", {
         email,
         password,
       });
-      console.log({ response });
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("token-init-date", new Date().getTime()); //Sirve para hacer calculos con la duracion del token
+      dispatch(
+        onLogin({
+          name: data.name,
+          uid: data.uid,
+        })
+      );
     } catch (error) {
-      console.log(error);
+      dispatch(
+        onLogout(
+          "Unfortunately, the credentials you provided for login are not correct."
+        )
+      );
+      setTimeout(() => {
+        dispatch(clearErrorNessage());
+      }, 1500);
     }
   };
 
