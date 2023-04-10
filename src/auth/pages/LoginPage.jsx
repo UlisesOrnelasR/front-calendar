@@ -1,10 +1,12 @@
+import { useEffect } from "react";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { useAuthStore } from "../../hooks/useAuthStore";
 import "./LoginPage.css";
+import Swal from "sweetalert2";
 
 export const LoginPage = () => {
-  const { startLogin } = useAuthStore();
+  const { startLogin, errorMessage } = useAuthStore();
 
   const {
     register,
@@ -36,6 +38,12 @@ export const LoginPage = () => {
     }
     console.log("se registro");
   };
+
+  useEffect(() => {
+    if (errorMessage !== undefined) {
+      Swal.fire("Authentication failed", errorMessage, "error");
+    }
+  }, [errorMessage]);
 
   return (
     <div className="container login-container">
