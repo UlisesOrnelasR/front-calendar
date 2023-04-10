@@ -63,6 +63,25 @@ export const useAuthStore = () => {
     }
   };
 
+  const checkAuthToken = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) return dispatch(onLogout());
+    try {
+      const { data } = calendarApi.get("/auth/renew");
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("token-init-date", new Date().getTime()); //Sirve para hacer calculos con la duracion del token
+      dispatch(
+        onLogin({
+          name: data.name,
+          uid: data.uid,
+        })
+      );
+    } catch (error) {
+      localStorage.clear();
+      if (!token) return dispatch(onLogout());
+    }
+  };
+
   return {
     // Propiedades
     status,
@@ -71,5 +90,6 @@ export const useAuthStore = () => {
     // Métodos
     startLogin,
     startRegister,
+    checkAuthToken,
   };
 };
