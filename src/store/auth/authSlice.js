@@ -23,12 +23,12 @@ export const authSlice = createSlice({
       state.user = {};
       state.errorMessage = action.payload;
     },
-    clearErrorNessage: (state) => {
+    clearErrorMessage: (state) => {
       state.errorMessage = undefined;
     },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { onCheckLogin, onLogin, onLogout, clearErrorNessage } =
+export const { onCheckLogin, onLogin, onLogout, clearErrorMessage } =
   authSlice.actions;
