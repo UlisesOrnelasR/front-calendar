@@ -30,7 +30,7 @@ export const useAuthStore = () => {
   const startRegister = async ({ email, password, name }) => {
     dispatch(onCheckLogin());
     try {
-      const { data } = await calendarApi.post("/auth/new", {
+      const { data } = await calendarApi.post("/auth/register", {
         email,
         password,
         name,

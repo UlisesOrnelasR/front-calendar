@@ -26,7 +26,6 @@ export const CalendarPage = () => {
   const eventStyleGetter = (event, start, end, isSelected) => {
     const isMyEvent =
       user.uid === event.user._id || user.uid === event.user.uid;
-    console.log(isMyEvent);
 
     const style = {
       backgroundColor: isMyEvent ? "#367CF7" : "#465660",
