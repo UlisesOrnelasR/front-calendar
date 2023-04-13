@@ -5,7 +5,7 @@ import {
 } from "../../../src/store/ui/uiSlice";
 
 describe("Pruebas en uiSlice", () => {
-  test("Debe de regresar el estado por defect ", () => {
+  test("Debe de regresar el estado por defecto", () => {
     // console.log(uiSlice.getInitialState());
     expect(uiSlice.getInitialState().isDateModalOpen).toBeFalsy();
   });
