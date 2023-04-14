@@ -10,6 +10,6 @@ describe("Pruebas en <FabDelete/>", () => {
         <FabDelete />
       </Provider>
     );
-    screen.debug();
+    // screen.debug();
   });
 });
