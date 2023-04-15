@@ -3,5 +3,6 @@ export const getEnvVariables = () => {
 
   return {
     ...import.meta.env,
+    VITE_MODE: import.meta.VITE_MODE,
   };
 };
