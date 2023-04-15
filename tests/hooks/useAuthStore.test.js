@@ -5,6 +5,7 @@ import { authSlice } from "../../src/store/auth/authSlice";
 import { useAuthStore } from "../../src/hooks/useAuthStore";
 import { NotAuthenticatedState, initialState } from "../fixtures/authStates";
 import { testUserCredentials } from "../fixtures/testUser";
+import { calendarApi } from "../../src/api";
 
 const getMockStore = (initialState) => {
   return configureStore({
@@ -22,6 +23,8 @@ const getMockStore = (initialState) => {
 };
 
 describe("Pruebas en useAuthStore", () => {
+  beforeEach(() => localStorage.clear()); // Limpiar el local storage en cada test para que no este afectado por otro.
+
   test("Debe de regresar los valores por defecto", () => {
     const mockStore = getMockStore({ ...initialState });
     const { result } = renderHook(() => useAuthStore(), {
@@ -42,7 +45,6 @@ describe("Pruebas en useAuthStore", () => {
   });
 
   test("startLogin debe de realizr el login correctamente", async () => {
-    localStorage.clear(); // Limpiar el local storage para que no este afectado por otro test
     const mockStore = getMockStore({ ...NotAuthenticatedState });
     const { result } = renderHook(() => useAuthStore(), {
       wrapper: ({ children }) => (
@@ -68,7 +70,6 @@ describe("Pruebas en useAuthStore", () => {
   });
 
   test("startLogin debe de fallar la autenticación", async () => {
-    localStorage.clear(); // Limpiar el local storage para que no este afectado por otro test
     const mockStore = getMockStore({ ...NotAuthenticatedState });
     const { result } = renderHook(() => useAuthStore(), {
       wrapper: ({ children }) => (
@@ -94,5 +95,42 @@ describe("Pruebas en useAuthStore", () => {
     });
     // console.log({ errorMessage, status, user });
     waitFor(() => expect(result.current.errorMessage).toBe(undefined));
+  });
+
+  test("startRegister debe de crear un usuario", async () => {
+    const newUser = {
+      email: "algo@google.com",
+      password: "123456789",
+      name: "Test User 2",
+    };
+
+    const mockStore = getMockStore({ ...NotAuthenticatedState });
+    const { result } = renderHook(() => useAuthStore(), {
+      wrapper: ({ children }) => (
+        <Provider store={mockStore}>{children}</Provider>
+      ),
+    });
+
+    const spy = jest.spyOn(calendarApi, "post").mockReturnValue({
+      data: {
+        ok: true,
+        uid: "1263781293",
+        name: "Test User",
+        token: "ALGUN-TOKEN",
+      },
+    });
+
+    await act(async () => {
+      await result.current.startRegister(newUser);
+    });
+
+    const { errorMessage, status, user } = result.current;
+    console.log({ errorMessage, status, user });
+    expect({ errorMessage, status, user }).toEqual({
+      errorMessage: undefined,
+      status: "authenticated",
+      user: { name: "Test User", uid: "1263781293" },
+    });
+    spy.mockRestore();
   });
 });
