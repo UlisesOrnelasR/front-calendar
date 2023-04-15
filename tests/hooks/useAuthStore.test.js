@@ -6,6 +6,7 @@ import { useAuthStore } from "../../src/hooks/useAuthStore";
 import { NotAuthenticatedState, initialState } from "../fixtures/authStates";
 import { testUserCredentials } from "../fixtures/testUser";
 import { calendarApi } from "../../src/api";
+import { authenticatedState } from "../fixtures/authStates";
 
 const getMockStore = (initialState) => {
   return configureStore({
@@ -147,11 +148,55 @@ describe("Pruebas en useAuthStore", () => {
     });
 
     const { errorMessage, status, user } = result.current;
-    console.log({ errorMessage, status, user });
+    // console.log({ errorMessage, status, user });
     expect({ errorMessage, status, user }).toEqual({
       errorMessage: expect.any(String),
       status: "not-authenticated",
       user: {},
+    });
+  });
+
+  test("checkAuthToken debe de fallar si no hay token", async () => {
+    const mockStore = getMockStore({ ...initialState });
+    const { result } = renderHook(() => useAuthStore(), {
+      wrapper: ({ children }) => (
+        <Provider store={mockStore}>{children}</Provider>
+      ),
+    });
+    // console.log("token", localStorage.getItem("token"));
+    await act(async () => {
+      await result.current.checkAuthToken();
+    });
+    const { errorMessage, status, user } = result.current;
+    // console.log({ errorMessage, status, user });
+    expect({ errorMessage, status, user }).toEqual({
+      errorMessage: undefined,
+      status: "not-authenticated",
+      user: {},
+    });
+  });
+
+  test("checkAuthToken debe de autenticar un usuario si hay un token", async () => {
+    const { data } = await calendarApi.post("/auth", testUserCredentials);
+    // console.log(data);
+    localStorage.setItem("token", data.token);
+
+    const mockStore = getMockStore({ ...initialState });
+    const { result } = renderHook(() => useAuthStore(), {
+      wrapper: ({ children }) => (
+        <Provider store={mockStore}>{children}</Provider>
+      ),
+    });
+    // console.log("token", localStorage.getItem("token"));
+    await act(async () => {
+      await result.current.checkAuthToken();
+    });
+    const { errorMessage, status, user } = result.current;
+    // console.log({ errorMessage, status, user });
+    expect({ errorMessage, status, user }).toEqual({
+      errorMessage: undefined,
+      status: "authenticated",
+      user: { name: "TestUser", uid: "6437462e5946c987bc0c8d06" },
     });
   });
 });
