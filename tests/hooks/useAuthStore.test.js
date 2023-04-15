@@ -125,12 +125,33 @@ describe("Pruebas en useAuthStore", () => {
     });
 
     const { errorMessage, status, user } = result.current;
-    console.log({ errorMessage, status, user });
+    // console.log({ errorMessage, status, user });
     expect({ errorMessage, status, user }).toEqual({
       errorMessage: undefined,
       status: "authenticated",
       user: { name: "Test User", uid: "1263781293" },
     });
-    spy.mockRestore();
+    spy.mockRestore(); // Destruye el espia para que las demas funciones pasen con normalidad
+  });
+
+  test("startRegister debe de fallar en la creación de un usuario", async () => {
+    const mockStore = getMockStore({ ...NotAuthenticatedState });
+    const { result } = renderHook(() => useAuthStore(), {
+      wrapper: ({ children }) => (
+        <Provider store={mockStore}>{children}</Provider>
+      ),
+    });
+
+    await act(async () => {
+      await result.current.startRegister(testUserCredentials);
+    });
+
+    const { errorMessage, status, user } = result.current;
+    console.log({ errorMessage, status, user });
+    expect({ errorMessage, status, user }).toEqual({
+      errorMessage: expect.any(String),
+      status: "not-authenticated",
+      user: {},
+    });
   });
 });
