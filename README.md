@@ -14,8 +14,7 @@ Para usar esta aplicación en tu propio entorno, sigue estos pasos:
 
 2.  Instala las dependencias:
 
-    `cd front-calendar
-npm install`
+    `cd front-calendar npm install`
 
 3.  Crea un archivo `.env` y agrega la URL de la API de backend como en el archivo `.env.example`
 4.  Inicia la aplicación:
