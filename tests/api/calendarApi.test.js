@@ -8,11 +8,11 @@ describe("Pruebas en el calendarApi", () => {
   });
 
   test("Debe de tener el x-token en el header de todas las peticiones", async () => {
-    const token =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2NDM3NDYyZTU5NDZjOTg3YmMwYzhkMDYiLCJuYW1lIjoiVGVzdFVzZXIiLCJpYXQiOjE2ODE1Mzg4MjUsImV4cCI6MTY4MTU0NjAyNX0.QdS04R6sbwuOhjUhDvu7brekS_pTwnDJuRAJNQRN34w";
+    const token = "ABC-123-XYZ";
     localStorage.setItem("token", token);
-    const res = await calendarApi.get("/events");
+    const res = await calendarApi.get("/auth");
     // console.log(res);
+    // console.log(res.config);
     expect(res.config.headers["x-token"]).toBe(token);
   });
 });
