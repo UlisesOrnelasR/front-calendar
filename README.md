@@ -54,3 +54,10 @@ Este proyecto utiliza las siguientes tecnologías:
 - Vite
 
 ¡Gracias por revisar nuestro repositorio! Si tienes alguna pregunta o sugerencia, no dudes en contactarnos. ¡Que tengas un excelente día! 🌞
+
+![login](https://github.com/UlisesOrnelasR/front-calendar/assets/99143567/38b95f98-76a1-43f6-8787-eeb3b89a51c3)
+
+![new-event](https://github.com/UlisesOrnelasR/front-calendar/assets/99143567/7a13fbde-ba5b-43c1-8a0d-20f27e4ee640)
+
+
+
